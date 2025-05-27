@@ -1,5 +1,6 @@
 import React, {Component} from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+
 
 class Aula03 extends Component {
 
@@ -7,7 +8,16 @@ class Aula03 extends Component {
         super(props);
         this.state = {
             backgroundColor: 'pink',
-            backgroundColorFundo: 'green'
+            backgroundColorFundo: 'green',
+            imagem: [
+                require('../imagens/1.jpg'),
+                require('../imagens/2.jpg'),
+                require('../imagens/3.jpg'),
+            ],
+
+            imagemAtual: 0,
+            contador: 0,
+            
         };
     }
 
@@ -20,18 +30,49 @@ class Aula03 extends Component {
         const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
         this.setState({backgroundColorFundo: randomColor});
     }
+
+    mudarImagem = () => {
+        this.setState(prevState => ({
+            imagemAtual: (prevState.imagemAtual + 1) % prevState.imagem.length
+        }));
+    }
+
+    contadorClique = () => {
+        this.setState(prevState => ({
+            contador: (prevState.contador + 1)
+        }));
+    }
     
     render (){
         return(
             <View style={[styles.container, {backgroundColor: this.state.backgroundColorFundo}]}>  
 
-                <TouchableOpacity style={[styles.botao, {backgroundColor: this.state.backgroundColor}]} onPress={this.changeColor}>
-                    <Text style={styles.textoBotao}>Toque para mudar a cor do botão</Text>
-                </TouchableOpacity>
+                <Image source={this.state.imagem[this.state.imagemAtual]}
+                        style={styles.imagem}
+                /> 
+                
+                <View style={styles.botoes}>
+                    <TouchableOpacity style={[styles.botao, {backgroundColor: this.state.backgroundColor}]} onPress={this.changeColor}>
+                        <Text style={styles.textoBotao}> mudar a cor do botão</Text>
+                    </TouchableOpacity>
 
-                <TouchableOpacity style={[styles.botaoFundo, {backgroundColor: this.state.backgroundColorFundo}]} onPress={this.changeColorFundo}>
-                    <Text style={styles.textoBotao}>Toque para mudar a cor do fundo</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity style={[styles.botaoFundo, {backgroundColor: this.state.backgroundColorFundo}]} onPress={this.changeColorFundo}>
+                        <Text style={styles.textoBotao}> mudar a cor do fundo</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.botao} onPress={() => {
+                        this.mudarImagem(),
+                        this.contadorClique()
+                    }}>
+                        <Text style={styles.textoBotao}> mudar a imagem</Text>
+                        
+                        
+                    </TouchableOpacity>
+                   
+                </View>
+                <Text style={styles.textoBotao}> Numero de cliques {this.state.contador}</Text>
+
+                
             </View>
         );
     }
@@ -42,7 +83,7 @@ export default Aula03;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'start',
         alignItems: 'center',
     },
 
@@ -50,7 +91,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'blue',
         padding: 15,
         borderRadius: 5,
-        width: 150,
+        width: 80,
         alignItems: 'center',
         borderColor: 'black',
         marginBottom: 40,
@@ -63,14 +104,31 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         padding: 15,
         borderRadius: 5,
-        width: 150,
+        width: 80,
         alignItems: 'center',
         borderWidth: 1,
+        borderRadius: 20
     },
 
     textoBotao: {
         color: 'white',
-        fontWeight: '500'
+        fontWeight: '500',
+    },
+
+    imagem: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 200,
+        width: 200,
+        marginBottom: 50,
+        marginTop: 100
+    },
+
+    botoes:{
+        justifyContent: 'space-between',
+        alignItems: 'baseline',
+        flexDirection: 'row',
+        width: 200,
     }
 
 })
