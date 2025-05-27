@@ -4,6 +4,6 @@ import Aula03 from './src/aula03';
 
 export default function App() {
   return (
-    <Tela/>
+    <Aula03/>
   );
 }
